@@ -1,47 +1,95 @@
-class Vertex {
- float x = 0;
- float y = 0;
- String name;
- HalfEdge IncidentEdge;
- 
- int marked = 0;
- //mit Vertex als Origin 
- 
-  
- Vertex(float setX, float setY, String setName){
-   x = setX;
-   y = setY;
-   name = setName;
+import java.util.*;
 
+class Vertex implements Cloneable {
+  private float x; // x-Koordinate
+  private float y; // y-Koordinate
+  private Edge incidentEdge; // eine inzidente Kante
+  private String name; // der Name
+
+  /* Eine Iteratorklasse, welche die inzidenten Kanten einer
+   Ecke zyklisch durchläuft
+   */
+  private class VertexEdgeIterator implements Iterator {
+    // wir verwenden einen internen Iterator
+    Iterator iter;
+
+    /* es wird zunächst eine Liste von den inzidenten Kanten angelegt 
+     und dann iteriert
+     */
+    public VertexEdgeIterator() {
+      // der Vector, der die Kantern speichert
+      Vector edges = new Vector();
+      // alle Kanten hinzufügen
+      Edge e = incidentEdge;
+      do {
+        edges.add(e);
+        e = (e.getTwin()).getNext();
+      } while (e != incidentEdge);
+      // den Iterator merken
+      iter = edges.iterator();
+    }
+
+    // alles durchreichen
+    public boolean hasNext() {
+      return iter.hasNext();
+    }
+
+    public Object next() {
+      return iter.next();
+    }
+
+    // gibt es nicht
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
   }
-  Vertex(){
-    
+  public Vertex(){
+   dcel.vertices.add(this); 
   }
-  void unmark(){
-    print("Vertex unmarked!");
-   marked = 0; 
+  // die Kanten durchlaufen
+  public Iterator traverseEdges() {
+    return new VertexEdgeIterator();
   }
-  void show(){
-   
-   if(marked == 0)
-   { 
-   fill(0);
-   textSize(25);
-   text(name,x,y-30);
-   fill(255);
-   strokeWeight(3);
-   fill(255,0,0);
-   
-   strokeWeight(1);
-   circle(x,y,20); 
-   marked = 1;
-   }
+
+  // getter/setter-Methoden
+
+  public Edge getIncidentEdge() {
+    return incidentEdge;
   }
-  float getX(){
-   return x; 
+
+  public float getX() {
+    return x;
   }
-  float getY(){
-   return y; 
+
+  public float getY() {
+    return y;
   }
-  
+
+  public String getName() {
+    return name;
+  }
+
+  public void setIncidentEdge(Edge e) {
+    incidentEdge = e;
+  }
+
+  public void setX(float x) {
+    this.x = x;
+  }
+
+  public void setY(float y) {
+    this.y = y;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String toString() {
+    return "Punkt " + name + "(" + x + " ," + y + ") " + incidentEdge.getName();
+  }
+    void show(){
+      fill(255,0,0);
+   circle((float)x,(float)y,10); 
+  }
 }
