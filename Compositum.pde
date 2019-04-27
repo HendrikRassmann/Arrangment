@@ -1,0 +1,3 @@
+class Compositum extends Edge{
+
+}
