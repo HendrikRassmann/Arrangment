@@ -12,7 +12,6 @@ class Edge implements Cloneable {
     dcel.edges.add(this);
   }
   public Edge(String x) {
-    
   }
   // Klone eine Kante
   public Object clone() {
@@ -86,55 +85,57 @@ class Edge implements Cloneable {
 
   // füge eine Ecke auf der Kante ein
   //die InsertFunktion muss ich auch nochmal selber machen:
-  public void insertVertex(Vertex insertVertex){
-   Edge newEdge =  dcel.createEdge(this.name + "_R",insertVertex,this.getDest());
-   this.name = name + "_L";
-   this.twin.setName(name + "'");
-   //verkabeln
-   newEdge.setNext(next);
-   this.next.setPrev(newEdge);
-   this.next.setNext(newEdge.getTwin());
-   newEdge.getTwin().setPrev(next.getTwin());
-   this.next = newEdge;
-   newEdge.setPrev(this);
-   this.twin.setPrev(newEdge.getTwin());
-   newEdge.getTwin().setNext(this.twin);
-    
+  public void insertVertex(Vertex insertVertex) {
+    Edge newEdge =  dcel.createEdge(this.name + "_R", insertVertex, this.getDest());
+    //face nicht vergessen:
+    newEdge.setIncidentFace(this.incidentFace);
+    newEdge.getTwin().setIncidentFace(this.twin.getIncidentFace());
+    this.name = name + "_L";
+    this.twin.setName(name + "'");
+    //verkabeln
+    newEdge.setNext(next);
+    this.next.setPrev(newEdge);
+    this.next.setNext(newEdge.getTwin());
+    newEdge.getTwin().setPrev(next.getTwin());
+    this.next = newEdge;
+    newEdge.setPrev(this);
+    this.twin.setPrev(newEdge.getTwin());
+    newEdge.getTwin().setNext(this.twin);
   }
   /*
   public Edge insertVertex(Vertex r) {    
-    // die neue Kante
-    Edge k = (Edge)this.clone();
-    Edge kt = (Edge)this.twin.clone();
-    k.setTwin(kt); 
-    kt.setTwin(k);
-    // für die bessere Lesbarkeit
-    Vertex p = this.origin;
-    Vertex q = this.twin.origin;
-    // die Punkte verzeigern
-    q.setIncidentEdge(kt);
-    r.setIncidentEdge(k);
-    // die Anfangspunkte setzen
-    k.setOrigin(r);
-    this.getTwin().setOrigin(r);
-    // die Kanten verzeigern
-    this.getNext().setPrev(k);
-    this.getTwin().getPrev().setNext(kt);
-    k.setPrev(this);
-    this.setNext(k);
-    kt.setNext(this.getTwin());
-    this.getTwin().setPrev(kt);  
-    // Facetten setzen
-    k.setIncidentFace(this.getIncidentFace());
-    kt.setIncidentFace(this.getTwin().getIncidentFace());
-    return k;
-  }*/
+   // die neue Kante
+   Edge k = (Edge)this.clone();
+   Edge kt = (Edge)this.twin.clone();
+   k.setTwin(kt); 
+   kt.setTwin(k);
+   // für die bessere Lesbarkeit
+   Vertex p = this.origin;
+   Vertex q = this.twin.origin;
+   // die Punkte verzeigern
+   q.setIncidentEdge(kt);
+   r.setIncidentEdge(k);
+   // die Anfangspunkte setzen
+   k.setOrigin(r);
+   this.getTwin().setOrigin(r);
+   // die Kanten verzeigern
+   this.getNext().setPrev(k);
+   this.getTwin().getPrev().setNext(kt);
+   k.setPrev(this);
+   this.setNext(k);
+   kt.setNext(this.getTwin());
+   this.getTwin().setPrev(kt);  
+   // Facetten setzen
+   k.setIncidentFace(this.getIncidentFace());
+   kt.setIncidentFace(this.getTwin().getIncidentFace());
+   return k;
+   }*/
 
   public String toString() {      
     show();
     return name + " Origin: " + origin.getName() + " Twin: " + twin.getName() + 
       " Next: " + next.getName() + " Prev: " + prev.getName() + " Face: " + ""
-      /*incidentFace.getName()*/;
+    /*incidentFace.getName()*/      ;
   }
   public void show() {
     //println("drawing edge: " + name);

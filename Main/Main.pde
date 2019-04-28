@@ -34,14 +34,12 @@ void keyPressed() {
       } else {
         insertX = width;
       }
-      
     } else {
       insertX = mouseX; 
-      if (yDist == mouseY){
-       insertY = 0; 
-      }
-      else {
-       insertY = width; 
+      if (yDist == mouseY) {
+        insertY = 0;
+      } else {
+        insertY = width;
       }
     }
     Vertex insertVertex = dcel.createVertex(vertexName, insertX, insertY);
@@ -58,33 +56,46 @@ void keyPressed() {
     nearestEdge.insertVertex(insertVertex);
 
     //schon zwei eingefügt?
-    if (dcel.vertices.size() %2 == 0 ){
+
+    if (dcel.vertices.size() %2 == 0 ) {
+
       Vertex secondLast = dcel.vertices.get(dcel.vertices.size()-2);
       Vertex last = dcel.vertices.get(dcel.vertices.size()-1);
+
       Edge edgeInnerSide = secondLast.getIncidentEdge();
       Edge edgeInnerSide2 = last.getIncidentEdge();
-      if (edgeInnerSide2.getIncidentFace() == dcel.out){
+      if (edgeInnerSide2.getIncidentFace() == dcel.out) {
         edgeInnerSide = edgeInnerSide.getTwin();
       }
-      if (edgeInnerSide.getIncidentFace() == dcel.out){
-        edgeInnerSide = edgeInnerSide.getTwin();
+      if (edgeInnerSide2.getIncidentFace() == dcel.out) {
+        edgeInnerSide2 = edgeInnerSide2.getTwin();
       }
-      Edge newEdge = dcel.createEdge(secondLast.getName() + "-" + last.getName(),secondLast,last);
-      dcel.connect1sided(newEdge,edgeInnerSide.getPrev());
-      dcel.connect1sided(newEdge.getTwin(),edgeInnerSide);
-      //andere SEite verdrahten
-      dcel.connect1sided(newEdge.getTwin(),edgeInnerSide2.getPrev());
+      Face face1 = edgeInnerSide.getIncidentFace();
+      Face face2 = edgeInnerSide2.getIncidentFace();
+
+      //edgeInnerSide.getIncidentFace().insertEdge(edgeInnerSide,edgeInnerSide2);//NPX
+      //die Berliner, funktioniert aber nicht so ganz
+
+      Edge newEdge = dcel.createEdge(secondLast.getName() + "-" + last.getName(), last, secondLast);
+
+
+      dcel.connect1sided(edgeInnerSide.getPrev(), newEdge);
+      dcel.connect1sided(edgeInnerSide2.getPrev(), newEdge.getTwin());
+      dcel.connect1sided(newEdge.getTwin(), edgeInnerSide);
       dcel.connect1sided(newEdge,edgeInnerSide2);
-      
-      
+
+      //andere SEite verdrahten
+      //dcel.connect1sided(newEdge.getTwin(),edgeInnerSide2.getPrev());
+      //dcel.connect1sided(newEdge,edgeInnerSide2);
     }
-    
+
+
+
     background(227);
     dcel.up.unmark();
 
     dcel.up.showGraph();
     //for (Edge e : dcel.edges) e.show();
     println("number of HalfEdges: " + dcel.edges.size());
-
   }
 }
