@@ -42,8 +42,8 @@ public class DCEL { //<>//
     e.setNext(f); 
     f.setPrev(e);
   }
-    public void createExample() {
-     println("example createtd!");
+  public void createExample() {
+    println("example createtd!");
     upLeft = createVertex("UpLeft", dist2Edge, dist2Edge);
     upRight = createVertex("UpRight", 640 - dist2Edge, dist2Edge);
     downRight = createVertex("downRight", 640 - dist2Edge, 640 - dist2Edge);
@@ -61,7 +61,7 @@ public class DCEL { //<>//
     connect(left, up);
 
     in = createFace("Inside", up/*, null*/);
-    out = createFace("Outside",up.getTwin()/*, null*/);
+    out = createFace("Outside", up.getTwin()/*, null*/);
   }
 
   public float distEdgeVertex(Edge e, Vertex vertex) {
@@ -75,6 +75,22 @@ public class DCEL { //<>//
     float t = max(0, min(1, PVector.sub(p, v).dot(PVector.sub(w, v) ) / l2 ));
     PVector projection = PVector.add(v, /*+*/ (PVector.sub(w, v).mult(t)));
     return p.dist(projection);
+  }
+  public float distEdgeXY(Edge e, float setX, float setY) {
+
+    Vertex dummyVertex = new Vertex();
+    dummyVertex.setX(setX);
+    dummyVertex.setY(setY);
+    float result = distEdgeVertex(e, dummyVertex);
+    //hinterher dummy entfernen, das nicht vergessen
+    dcel.vertices.remove(dummyVertex);
+    return result;
+  }
+
+  public boolean toTheLeft(Edge e, Vertex vertex) {
+    //return ((b.X - a.X)*(c.Y - a.Y) - (b.Y - a.Y)*(c.X - a.X)) > 0;
+
+    return ((e.getDest().getX() - e.getOrigin().getX())*(vertex.getY() - e.getOrigin().getY()) - (e.getDest().getY() - e.getOrigin().getY())*(vertex.getX() - e.getOrigin().getX() )) >= 0;
   }
 
   public Face createFace(String name, Edge outer/*, Edge inner*/) {
