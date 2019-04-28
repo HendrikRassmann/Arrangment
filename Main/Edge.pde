@@ -4,12 +4,15 @@ class Edge implements Cloneable {
   private Face incidentFace;
   private Edge next;
   private Edge prev;
-  private String name;
+  private String name = "noNameGiven";
   private int marked = 0;
 
 
   public Edge() {
     dcel.edges.add(this);
+  }
+  public Edge(String x) {
+    
   }
   // Klone eine Kante
   public Object clone() {
@@ -82,6 +85,23 @@ class Edge implements Cloneable {
   }
 
   // füge eine Ecke auf der Kante ein
+  //die InsertFunktion muss ich auch nochmal selber machen:
+  public void insertVertex(Vertex insertVertex){
+   Edge newEdge =  dcel.createEdge(this.name + "_R",insertVertex,this.getDest());
+   this.name = name + "_L";
+   this.twin.setName(name + "'");
+   //verkabeln
+   newEdge.setNext(next);
+   this.next.setPrev(newEdge);
+   this.next.setNext(newEdge.getTwin());
+   newEdge.getTwin().setPrev(next.getTwin());
+   this.next = newEdge;
+   newEdge.setPrev(this);
+   this.twin.setPrev(newEdge.getTwin());
+   newEdge.getTwin().setNext(this.twin);
+    
+  }
+  /*
   public Edge insertVertex(Vertex r) {    
     // die neue Kante
     Edge k = (Edge)this.clone();
@@ -108,17 +128,17 @@ class Edge implements Cloneable {
     k.setIncidentFace(this.getIncidentFace());
     kt.setIncidentFace(this.getTwin().getIncidentFace());
     return k;
-  }
+  }*/
 
   public String toString() {      
     show();
     return name + " Origin: " + origin.getName() + " Twin: " + twin.getName() + 
-      " Next: " + next.getName() + " Prev: " + prev.getName() + " Face: " + 
-      incidentFace.getName();
+      " Next: " + next.getName() + " Prev: " + prev.getName() + " Face: " + ""
+      /*incidentFace.getName()*/;
   }
   public void show() {
-    println("drawing edge: " + name);
-    line(origin.getX(), origin.getY(), twin.getOrigin().getX(), twin.getOrigin().getY()); 
+    //println("drawing edge: " + name);
+    line(origin.getX(), origin.getY(), twin.getOrigin().getX(), twin.getOrigin().getY()); //NPX
     origin.show();
     twin.getOrigin().show();
   }
@@ -132,10 +152,11 @@ class Edge implements Cloneable {
   }
   void showGraph() {
     if (marked == 0) {
+      println("drawing : " + name);
       marked = 1;
       show();
       twin.showGraph();
-      prev.showGraph();
+      prev.showGraph();//NPX
       next.showGraph();
     }
   }

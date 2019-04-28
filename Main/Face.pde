@@ -1,7 +1,8 @@
 class Face implements Cloneable {
     private Edge outerComponent; // der äußere Rand
+    //gets ignored 
     private Vector innerComponents = new Vector(); // die inneren Ränder
-    private String name; // der Name
+    private String name = "freshFace"; // der Name
 
     /*
       Klone die Facette, der Vector wird geklont, aber nicht seine Inhalte
