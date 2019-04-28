@@ -6,9 +6,9 @@ class Edge implements Cloneable {
   private Edge prev;
   private String name;
   private int marked = 0;
-  
-  
-  public Edge(){
+
+
+  public Edge() {
     dcel.edges.add(this);
   }
   // Klone eine Kante
@@ -23,10 +23,10 @@ class Edge implements Cloneable {
   }
 
   // getter/setter Methoden
-  public void setMark(int setMark){
-   marked = setMark; 
+  public void setMark(int setMark) {
+    marked = setMark;
   }
-  
+
   public Vertex getOrigin() {
     return origin;
   }
@@ -122,22 +122,30 @@ class Edge implements Cloneable {
     origin.show();
     twin.getOrigin().show();
   }
-  public void unmark(){
-    if (marked != 0){
-     marked = 0;
-     twin.unmark();
-     next.unmark();
-     prev.unmark();
+  public void unmark() {
+    if (marked != 0) {
+      marked = 0;
+      twin.unmark();
+      next.unmark();
+      prev.unmark();
     }
   }
-  void showGraph(){
-   if (marked == 0){
-    marked = 1;
-    show();
-    twin.showGraph();
-    prev.showGraph();
-    next.showGraph();
-   }
+  void showGraph() {
+    if (marked == 0) {
+      marked = 1;
+      show();
+      twin.showGraph();
+      prev.showGraph();
+      next.showGraph();
+    }
   }
-  
+
+  boolean boundingBoxIntersects(Edge otherEdge) {
+    //bounding Box check
+    //alle drüber
+    //alle rechts
+    //alle links
+    //all drunter
+    return false;
+  }
 }
